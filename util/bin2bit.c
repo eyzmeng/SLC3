@@ -437,7 +437,12 @@ main(int argc, char **argv)
 		fprintf(stderr, "%.*s\n", WIDTH, LINE);
 	}
 
-	fprintf(stderr, "%zu octet%s written\n", st.n, st.n == 1 ? "" : "s");
+	/* n has a meaningful interpretation only if the parsing
+	 * actually started and the file was opened for write */
+	if (st.v && st.h) {
+		fprintf(stderr, "%zu octet%s written\n",
+			st.n, st.n == 1 ? "" : "s");
+	}
 	if (outfile_new) {
 		free(st.outfile);
 	}
