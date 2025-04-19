@@ -1,6 +1,6 @@
 #!/bin/sh
 
-. t/lib/test-functions
+. t/lib/test-functions.sh
 plan 5
 
 found=0
