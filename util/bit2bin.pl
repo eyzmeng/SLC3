@@ -69,4 +69,4 @@ $fout->flush();
 close $fout if $fout_new;
 close $fin if $fin_new;
 
-print "Serialized ${n} octet@{['s' x !!($n == 1)]}\n";
+print "Serialized ${n} octet@{['s' x !!($n != 1)]}\n";
