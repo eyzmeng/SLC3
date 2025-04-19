@@ -11,11 +11,21 @@
 #
 # NOTE:
 #   Don't use set -e if you want to take advantage of $? :)
+#   Namely, note() diag() ok() all thrive on $?.
+#   They act as no-ops, so it is possible to write:
+#
+#      /path/to/danger blah blah >out
+#
+#      note "danger squeaked"
+#      note <out
+#
+#      ok "danger was safe" || diag "danger died with $?"
 #
 # GLOBALS:
 #   $a, $b          temp variables
 #   $x, $y          even more variables
 #   $c              test counter
+#   $r              return value
 #   $PLAN           # of planned tests
 #
 
@@ -86,25 +96,33 @@ skip_all () {
 #     Ha haha!
 #     EOM
 #
+# Error code is preserved.
+#
 note () {
+	r=$?
 	if [ $# -gt 0 ]; then
 		printf '%s\n' "$*" |
 		sed 's/^/# /' | sed 's/ $//'
 	else
 		sed 's/^/# /' | sed 's/ $//'
 	fi
+	return $?
 }
 
 #
 # Print miscellaneous info to standard error.
 # You use it exactly the same way you use note().
+# Error code is preserved here too.
 #
 # NOTE: Generally, TAP Harness expects the first
 # line of diagnosis following "not ok ..." to be a
 # short reason for test fail.  Detailed diagnosis
 # should start on the line *after* that.
 #
-diag () { note "$@" >&2; }
+diag () {
+	note "$@" >&2
+	return $?
+}
 
 c=0
 
