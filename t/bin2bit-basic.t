@@ -4,17 +4,13 @@
 . t/lib/test-find-exec.sh
 plan 5
 
-found=0
-
-EXENAME=util/bin2bit
-EXECBIN="$PWD/$EXENAME"
+EXEPATH=util/bin2bit
+EXECBIN="$PWD/$EXEPATH"
+EXENAME="$(basename "$EXEPATH")"
 cd "$tmp" || die "error: cd \$tmp"
-find_exec && found=1
 
-if [ "$found" -eq 0 ]
+if find_exec
 then
-	skip 4 "no $EXENAME"
-else
 	cat >basic.1.txt <<'EOF'
 0011000000000000
 0001001100100100
@@ -53,6 +49,8 @@ EOF
 8 octets written
 EOF
 	is basic.1.err basic.1.wnt "stderr reports 8 octets"
+else
+	skip 4 "no $EXENAME"
 fi
 
 # vim: ft=sh:
