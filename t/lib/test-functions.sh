@@ -183,7 +183,7 @@ EOM
 	y="$2"
 	shift
 	shift
-	if diff -q "$x" "$y" >/dev/null >&2; then
+	if diff -q "$x" "$y" >/dev/null 2>&1; then
 		say ok "$@"
 		return 0
 	fi
