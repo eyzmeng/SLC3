@@ -14,6 +14,7 @@
 #
 # GLOBALS:
 #   $a, $b          temp variables
+#   $x, $y          even more variables
 #   $c              test counter
 #   $PLAN           # of planned tests
 #
@@ -160,11 +161,11 @@ is () {
 error: is() expects at least two arguments -- the files to compare
 EOM
 	fi
-	a="$1"
-	b="$2"
+	x="$1"
+	y="$2"
 	shift
 	shift
-	if diff -q "$a" "$b" >/dev/null >&2; then
+	if diff -q "$x" "$y" >/dev/null >&2; then
 		say ok "$@"
 		return 0
 	fi
@@ -174,8 +175,8 @@ EOM
 	else
 		diag "Test failed!"
 	fi
-	diag "Files '$a' and '$a' differ:"
-	diff -u "$a" "$b" | diag
+	diag "Files '$x' and '$y' differ:"
+	diff -u "$x" "$y" | diag
 	return 1
 }
 
