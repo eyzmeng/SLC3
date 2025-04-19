@@ -193,7 +193,7 @@ readabit(struct parse_state *st, char const o)
 		return 0;
 	}
 	snprintf(LINE, WIDTH - 1,
-		"error: invalid character: `%s'",
+		"invalid character: `%s'",
 		QASC[o & OCTET_MASK]);
 	return 1;
 }
