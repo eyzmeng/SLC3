@@ -144,6 +144,13 @@ translate(char *filename)
 }
 
 
+/*
+ * readabit() parses one char of input and updates the states
+ *    (EXCEPT .h, which must always be one less than needed)
+ * writedat() writes one byte of output and resets .b and .e
+ *    (though it's a no-op if .c is nonzero or .e < OCTET_BIT)
+ */
+
 int
 readabit(struct parse_state *st, char const o)
 {
@@ -429,6 +436,10 @@ main(int argc, char **argv)
 
 	int rv;
 	if ((rv = encode(&st))) {
+		/* h and v are set to nonzero by encode() the first time
+		 * anything is parsed; use them to differentiate the
+		 * stages of parse error, though *NOT* the error status.
+		 * (that we will just keep as `rv'...) */
 		if (st.v && st.h) {
 			fprintf(stderr, "%s:%zu:%zu: %.*s\n",
 				st.infile ? st.infile : "<stdin>",
