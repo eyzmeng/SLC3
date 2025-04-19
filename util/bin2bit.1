@@ -1,0 +1,28 @@
+.\" Written by me (ethan)!
+.TH BIN2BIT 1 2025-04-16 "SLC3 Utilities"
+.SH NAME
+bin2bit \- convert LC3 binary to real binary
+.SH SYNOPSIS
+.SY bin2bit
+.I infile
+.RI [ outfile ]
+.YS
+.SH DESCRIPTION
+Convert groups of 8 bits represented by \`0' and \`1' into octets, starting from
+most significant bit to the least.  Any text following a comment character
+(\`#' or \`;') are ignored.  Whitespace characters (LF, CR, HT, SP), as well as
+\`.' and \`_' are ignored.
+.P
+As a basic sanity check, all words must be separated by whitespace.
+.P
+It is an error to supply anything other than the two digits.
+.SH OPTIONS
+.IP infile
+Input file to read from.
+.IP outfile
+Outfile to write to.  By default,
+.I bin2bit
+will replace the rightmost file extension with `.obj' (given that it
+isn't already `.obj'), then append `.obj'.
+.SH EXIT STATUS
+0 on success, 1 on system error, -1 on programming error.
