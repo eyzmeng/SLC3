@@ -27,7 +27,7 @@ bit2bin.1: util/bit2bin.1
 	cp util/bit2bin.1 bit2bin.1
 
 test: ${prog}
-	prove
+	prove -f
 
 clean:
 	-rm -f ${prog} ${docs}
