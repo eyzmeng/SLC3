@@ -113,4 +113,6 @@ else
 	skip 8 "no $EXEPATH"
 fi
 
+conclude
+
 # vim: ft=sh:

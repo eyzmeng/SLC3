@@ -216,4 +216,11 @@ skip () {
 	done
 }
 
+#
+# Disregard $? and peacefully exit.
+#
+conclude () {
+	exit 0
+}
+
 return 0
