@@ -106,7 +106,7 @@ note () {
 	else
 		sed 's/^/# /' | sed 's/ $//'
 	fi
-	return $?
+	return $r
 }
 
 #
