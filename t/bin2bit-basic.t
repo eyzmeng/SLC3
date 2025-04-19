@@ -1,4 +1,5 @@
 #!/bin/sh
+# shellcheck disable=SC2317
 
 . t/lib/test-functions.sh
 . t/lib/test-find-exec.sh
