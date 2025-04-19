@@ -343,8 +343,8 @@ PANIC:
 		memmove(LINE + off, lastwrd, len * sizeof(char));
 		/* GCC won't let me do this :( */
 		/* strncpy(LINE + off - 2, ": ", 2); */
-		LINE[off + 0] = ':';
-		LINE[off + 1] = ' ';
+		LINE[off - 1] = ' ';
+		LINE[off - 2] = ':';
 		strncpy(LINE, blame, off - 2);
 	}
 	/*
@@ -430,11 +430,13 @@ main(int argc, char **argv)
 	int rv;
 	if ((rv = encode(&st))) {
 		if (st.v && st.h) {
-			fprintf(stderr, "%s:%zu:%zu: ",
+			fprintf(stderr, "%s:%zu:%zu: %.*s\n",
 				st.infile ? st.infile : "<stdin>",
-				st.v, st.h);
+				st.v, st.h, WIDTH, LINE);
 		}
-		fprintf(stderr, "%.*s\n", WIDTH, LINE);
+		else {
+			fprintf(stderr, "%.*s\n", WIDTH, LINE);
+		}
 	}
 
 	/* n has a meaningful interpretation only if the parsing

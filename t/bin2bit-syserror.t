@@ -36,7 +36,7 @@ then
 	cat <<EOF >"$my".wnt
 ${my}.txt: No such file or directory
 EOF
-	is "$my".err "$my".wnt "TODO $mc - stderr reports no octets"
+	is "$my".err "$my".wnt "$mc - stderr reports no octets"
 else
 	skip 3 "no $EXEPATH"
 fi

@@ -26,7 +26,7 @@ then
 	cat <<EOF >"$my".wnt
 errorfmt.1.a-veryveryveryveryVERYveryveryveryVERYver: No such file or directory
 EOF
-	is "$my".err "$my".wnt "TODO stderr truncates correctly"
+	is "$my".err "$my".wnt "stderr truncates correctly"
 else
 	skip 2 "no $EXEPATH"
 fi
