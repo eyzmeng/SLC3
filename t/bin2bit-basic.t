@@ -1,6 +1,7 @@
 #!/bin/sh
 
 . t/lib/test-functions.sh
+. t/lib/test-find-exec.sh
 plan 5
 
 found=0
@@ -8,17 +9,7 @@ found=0
 EXENAME=util/bin2bit
 EXECBIN="$PWD/$EXENAME"
 cd "$tmp" || die "error: cd \$tmp"
-test -x "$EXECBIN"
-if ok "$EXENAME is executable by us"
-then
-	found=1
-else
-	diag <<EOM
-error: $EXENAME isn't there
-I am a test for bin2bit but I cannot execute \`$EXENAME'.
-Either skip the t/bin2bit* tests or compile the requested program.
-EOM
-fi
+find_exec && found=1
 
 if [ "$found" -eq 0 ]
 then
