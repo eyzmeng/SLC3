@@ -182,9 +182,11 @@ readabit(struct parse_state *st, char const o)
 	 * like mixing two instructions on one line.
 	 */
 	if (st->n % WORD_SIZE == 0 && st->e == 0 && !st->s) {
+		/* N.B. comment is a kind of whitespace
+		 * (the terminating line feed being one) */
 		strncpy(LINE,
 			"start of word should be "
-			"separated by something",
+			"separated by whitespace",
 			WIDTH - 1);
 		LINE[WIDTH] = '\0';
 		return 1;

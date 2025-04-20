@@ -83,7 +83,7 @@ EOM
 	is "$my".got "$my".wnt "$mc - object 137F"
 
 	cat <<EOF >"$my".wnt
-${my}.txt:2:2: start of word should be separated by something
+${my}.txt:2:2: start of word should be separated by whitespace
 2 octets written
 EOF
 	is "$my".err "$my".wnt "$mc - stderr reports error and 2 octets"
@@ -163,7 +163,7 @@ EOF
 	is "$my".got "$my".wnt "$mc - object 5AA0 1040"
 
 	cat <<EOF >"$my".wnt
-${my}.txt:6:21: start of word should be separated by something
+${my}.txt:6:21: start of word should be separated by whitespace
 4 octets written
 EOF
 	is "$my".err "$my".wnt "$mc - stderr reports error and 4 octets"

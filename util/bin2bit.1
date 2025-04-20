@@ -1,5 +1,5 @@
 .\" Written by me (ethan)!
-.TH BIN2BIT 1 2025-04-16 "SLC3 Utilities"
+.TH BIN2BIT 1 2025-04-19 "SLC3 Utilities"
 .SH NAME
 bin2bit \- convert LC3 binary to real binary
 .SH SYNOPSIS
@@ -14,6 +14,8 @@ most significant bit to the least.  Any text following a comment character
 \`.' and \`_' are ignored.
 .P
 As a basic sanity check, all words must be separated by whitespace.
+Comments is considered a special kind of whitespace, as they are
+terminated by one (LF namely).
 .P
 It is an error to supply anything other than the two digits.
 .SH OPTIONS
