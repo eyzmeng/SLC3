@@ -155,10 +155,12 @@ int
 readabit(struct parse_state *st, char const o)
 {
 	/* Start word */
-	if (   o == '\t' || o == ' ' || o == '\r'
-	    || o == '.'  || o == '_' )
-	{
+	if (o == '\t' || o == ' ' || o == '\r') {
 		st->s = 1;
+		return 0;
+	}
+	/* Connectors */
+	if (o == '.'  || o == '_') {
 		return 0;
 	}
 	/* Start word + exit comment */
