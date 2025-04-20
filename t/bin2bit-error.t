@@ -119,13 +119,13 @@ EOM
 
 	hexdump -C "$my".obj > "$my".got
 	printf '\x24' | hexdump -C >"$my".wnt
-	is "$my".got "$my".wnt "object 24"
+	is "$my".got "$my".wnt "$mc - object 24"
 
 	cat <<EOF >"$my".wnt
 ${my}.txt:3:14: invalid character: \`O'
 1 octet written
 EOF
-	is "$my".err "$my".wnt "stderr reports error and 1 octet, case 2"
+	is "$my".err "$my".wnt "$mc - stderr reports error and 1 octet"
 else
 	skip 12 "no $EXEPATH"
 fi
