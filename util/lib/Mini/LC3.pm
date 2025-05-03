@@ -42,8 +42,10 @@ sub new
 	# Last error OR "HALT"
 	$self->{E} = undef;
 	$self->{DEBUG} = 0;
+	# Don't start at PC = 0 for goodness sake...
+	$self->PC(0x3000);
 	# Set CC to something so that Branch always
-	# (1111 000[9-bit offset]) would actually branch
+	# (0000 111[9-bit offset]) would actually branch
 	$self->CC(CC_Z);
 
 	# Define TRAPs
@@ -139,8 +141,12 @@ sub halted
 sub R {
 	my $self = shift;
 	my ($off, $arg) = @_;
-	# This is an assertion; end users should not call us
-	0 <= $off < 10 or die("Register index of bounds: $off");
+	# This used to be an assertion... until it isn't
+	# (because my rule of thumb: if it is well-defined enough,
+	# it can be a public function.  I don't really see a reason
+	# to hide it.  (Although in this circumstance it is only
+	# guaranteed that $self->R(0 .. 7) would make sense...)
+	0 <= $off < 10 or croak("Register index of bounds: $off");
 	if (defined $arg) {
 		$arg %= 0x10000;
 		return vec($self->{R}, $off << 4, 16) = $arg;
@@ -329,7 +335,7 @@ sub exec
 
 	if ($opcode & $LHSMASK) {
 		# Bit 9:3 (offset 9 width 3)
-		$lhs = ($IR >> 9) & 007;
+		$lhs = ($IR >> 9) & 0007;
 	}
 
 	my $rhs;
@@ -351,7 +357,7 @@ sub exec
 
 	if ($opcode & $RHSMASK) {
 		# Bit 6:3 (offset 6 size 3)
-		$rhs = ($IR >> 6) & 007;
+		$rhs = ($IR >> 6) & 0007;
 	}
 
 	# Handle PC-offset stuff
@@ -439,7 +445,7 @@ sub exec
 			}
 			# Or get SRC2 from bit 0:3...
 			else {
-				my $src = $IR & 007;
+				my $src = $IR & 0007;
 				$opr = $self->R($src);
 			}
 		}
@@ -500,7 +506,7 @@ sub trap
 	}
 	if (@_ % 2) {
 		croak ("trap() should be called with an even number "
-			. "of arguments (got @{[scalar(@_) + 1]})");
+			. "of arguments (got @{[scalar(@_)]})");
 	}
 	my %set = @_;
 	while (($vec, $sir) = each %set) {
@@ -537,12 +543,12 @@ sub load
 
 # This reads two raw bytes.
 sub _read2 {
-	my ($n, $fh, $wref, $file) = @_;
+	my ($nref, $fh, $wref, $file) = @_;
 	my $s = read $fh, $$wref, 2;
 	if (defined $s) {
-		$$n += $s;
+		$$nref += $s;
 		if ($s < 2) {
-			croak "$file:$n: deficient word size"
+			croak "$file:$$nref: deficient word size"
 		}
 	}
 	return $s;
@@ -558,10 +564,10 @@ sub symload
 		$levi =~ s[^//\t*][];
 		next unless length $levi;
 		# Skip obvious garbage lines
-		next if $levi =~ /Symbol +table/i;
-		next if $levi =~ /Scope +level +0/i;
-		next if $levi =~ /^[- ]+$/i;
-		next if $levi =~ /Symbol +Name +Page +Address/i;
+		next if $levi =~ /Symbol table/i;
+		next if $levi =~ /Scope level 0/i;
+		next if $levi =~ /^[- ]+$/;
+		next if $levi =~ /Symbol Name +Page Address/i;
 		# Reverse string...
 		my $evil = join '', reverse split //, $levi;
 		# Split out the very last chunk, by any whitespace
