@@ -272,7 +272,7 @@ sub _nzp
 #                                0  0  0 [- SR2 -]
 # JSR operand: 1 [-       OFFSET (11-bit)       -]
 # JSSR:        0  0  0 [- BAE -] 0  0  0  0  0  0
-#                 
+#
 sub exec
 {
 	my $self = shift;
@@ -360,7 +360,7 @@ sub exec
 			_modulo(\$off, 9);
 			$self->debug("  BR   %s%s%s off=%03X[%04X]\n",
 				$lhs & CC_N ? "n" : " ",
-			       	$lhs & CC_Z ? "z" : " ",
+				$lhs & CC_Z ? "z" : " ",
 				$lhs & CC_P ? "p" : " ",
 				$off & 0x1FF, $PC + $off);
 			$self->PC($PC + $off) if $self->CC & $lhs;
@@ -572,7 +572,7 @@ sub symload
 		@plot == 2 or
 			croak ("$file:$.: expected two columns");
 		# A valid LC-3 address is a 4-digit hexadecimal number
-		(my $addr = $plot[1]) =~ /[[:xdigit:]]{4}/i or 
+		(my $addr = $plot[1]) =~ /[[:xdigit:]]{4}/i or
 			croak ("$file:$.: expected address '$plot[1]'");
 		# This returns the old address, if defined.
 		# In scalar context, becomes 0/1....?
@@ -598,9 +598,9 @@ sub symbol
 
 # Package ourselves
 my @OPCODE = qw(
-	OP_BR  OP_ADD OP_LD  OP_ST  
-	OP_JSR OP_AND OP_LDR OP_STR 
-	OP_RTI OP_NOT OP_LDI OP_STI 
+	OP_BR  OP_ADD OP_LD  OP_ST
+	OP_JSR OP_AND OP_LDR OP_STR
+	OP_RTI OP_NOT OP_LDI OP_STI
 	OP_JMP OP_RES OP_LEA OP_TRAP
 );
 
