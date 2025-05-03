@@ -276,8 +276,6 @@ sub _nzp
 #
 # ALU operand                    1 [- IMMED (5) -]
 #                                0  0  0 [- SR2 -]
-# JSR operand: 1 [-       OFFSET (11-bit)       -]
-# JSSR:        0  0  0 [- BAE -] 0  0  0  0  0  0
 #
 sub exec
 {
