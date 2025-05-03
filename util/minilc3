@@ -1,0 +1,7 @@
+#!/usr/bin/env perl
+
+use FindBin;
+use File::Spec;
+
+exec "$^X", "-MCarp=verbose", "-I$FindBin::Bin/lib", "$0.pl", @ARGV;
+die "cannot exec $0.pl: $!";
