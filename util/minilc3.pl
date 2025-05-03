@@ -15,12 +15,8 @@ my $lc3 = Mini::LC3->new();
 foreach my $file (@ARGV) {
 	open my $fh, '<', $file or die "$!";
 	my $size = $lc3->load($file, $fh);
-	print sprintf
-		"Read %d byte%s from $file\n",
-		$size, "s" x !!($size != 1);
 	close $fh;
 }
-#$lc3->load_symbol_table("p4code.sym");
 
 use Time::HiRes qw(usleep);
 my $inst = 0;
@@ -29,5 +25,3 @@ while (!$lc3->halted()) {
 	!($lc3->step()) or die "LC-3 error: ", $lc3->error(), "\n";
 	$inst++;
 }
-
-print STDERR "Halted after $inst instruction@{['s' x !!($inst == 1)]}s\n"
