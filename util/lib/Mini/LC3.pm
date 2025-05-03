@@ -390,18 +390,15 @@ sub exec
 		}
 		# LD loads M[PC + $off] into R[$lhs]
 		# CC is updated to the sign of this word.
-		if ($opcode & (OP_LD | OP_LDI)) {
+		if ($opcode & (OP_LD | OP_LDI | OP_LDR)) {
 			my $word = $self->M($addr);
-			$self->debug("  LD%s  R%d off=%d[%04X] => %04X\n",
-				$opcode & OP_LDI ? "I" : " ", $lhs,
-				$off, $PC + $off, $word);
 			$self->R($lhs, $word);
 			$self->CC(_nzp($word));
 			return;
 		}
 		# ST stores R[$lhs] into M[PC + $off]
 		# CC updated similarly.
-		if ($opcode & (OP_ST | OP_STI)) {
+		if ($opcode & (OP_ST | OP_STI | OP_STR)) {
 			my $word = $self->R($lhs);
 			$self->M($addr, $word);
 			$self->CC(_nzp($word));
