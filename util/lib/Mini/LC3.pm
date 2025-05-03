@@ -8,14 +8,14 @@ use Carp;
 
 use constant {
 	# Opcode (bit masks)
-	OP_BR	=> 0x0001, OP_ADD  => 0x0002, OP_LD   => 0x0004, OP_ST	 => 0x0008,
-	OP_JSR	=> 0x0010, OP_AND  => 0x0020, OP_LDR  => 0x0040, OP_STR  => 0x0080,
-	OP_RTI	=> 0x0100, OP_NOT  => 0x0200, OP_LDI  => 0x0400, OP_STI  => 0x0800,
-	OP_JMP	=> 0x1000, OP_RES  => 0x2000, OP_LEA  => 0x4000, OP_TRAP => 0x8000,
+	OP_BR   => 0x0001, OP_ADD  => 0x0002, OP_LD   => 0x0004, OP_ST   => 0x0008,
+        OP_JSR  => 0x0010, OP_AND  => 0x0020, OP_LDR  => 0x0040, OP_STR  => 0x0080,
+        OP_RTI  => 0x0100, OP_NOT  => 0x0200, OP_LDI  => 0x0400, OP_STI  => 0x0800,
+        OP_JMP  => 0x1000, OP_RES  => 0x2000, OP_LEA  => 0x4000, OP_TRAP => 0x8000,
 
 	# Service routines
 	SR_GETC  => 0x0020, SR_OUT   => 0x0021, SR_PUTS  => 0x0022,
-	SR_IN	 => 0x0023, SR_PUTSP => 0x0024, SR_HALT  => 0x0025,
+	SR_IN    => 0x0023, SR_PUTSP => 0x0024, SR_HALT  => 0x0025,
 
 	# Condition codes
 	CC_N => 4, CC_Z => 2, CC_P => 1,
@@ -23,8 +23,8 @@ use constant {
 	# Memory-mapped (built-in labels?)
 	MM_KBSR => 0xFE00,
 	MM_KBDR => 0xFE02,
-	MM_DSR	=> 0xFE04,
-	MM_DDR	=> 0xFE06,
+	MM_DSR  => 0xFE04,
+	MM_DDR  => 0xFE06,
 };
 
 sub new
@@ -53,7 +53,7 @@ sub new
 			read STDIN, my $char, 1;
 			my $data = ord($char);
 			my $word = $data & 0xFF;
-			$self->debug("	  GET a char %X[%02X]\n",
+			$self->debug("    GET a char %X[%02X]\n",
 				$data, $word);
 			$self->R0($word);
 			return;
@@ -62,7 +62,7 @@ sub new
 			my $self = shift;
 			my $data = $self->R0();
 			my $char = chr($data & 0xFF);
-			$self->debug("	  OUT a char %02X['%s']\n",
+			$self->debug("    OUT a char %02X['%s']\n",
 				$data, $char);
 			print STDOUT $char;
 			STDOUT->flush();
@@ -73,7 +73,7 @@ sub new
 			my $ptr = $self->R0();
 			while (my $data = $self->M($ptr++)) {
 				my $char = chr($data & 0xFF);
-				$self->debug("	  PUT a char %02X['%s']\n",
+				$self->debug("    PUT a char %02X['%s']\n",
 					$data, $char);
 				print STDOUT $char;
 			}
@@ -248,30 +248,30 @@ sub _nzp
 }
 
 # The LC-3 ISA:
-#	       B  A  9	8  7  6  5  4  3  2  1	0
-#	      ------------------------------------
-#    BR 0001  [- NZP -][-   PC OFFSET (9-bit)	-]
-#   ADD 0001  [- DST -][- SRC -][% ALU	operand %]
-#    LD 0010  [- DST -][-   PC OFFSET (9-bit)	-]
-#    ST 0011  [- SRC -][-   PC OFFSET (9-bit)	-]
-#   JSR 0100   1 [-	PC OFFSET  (11-bit)	-]
-#  JSRR 0100   0  0  0 [- BAE -] 0  0  0  0  0	0
-#   AND 0101  [- DST -][- SRC -][% ALU	operand %]
+#              B  A  9  8  7  6  5  4  3  2  1  0
+#             ------------------------------------
+#    BR 0001  [- NZP -][-   PC OFFSET (9-bit)   -]
+#   ADD 0001  [- DST -][- SRC -][% ALU  operand %]
+#    LD 0010  [- DST -][-   PC OFFSET (9-bit)   -]
+#    ST 0011  [- SRC -][-   PC OFFSET (9-bit)   -]
+#   JSR 0100   1 [-     PC OFFSET  (11-bit)     -]
+#  JSRR 0100   0  0  0 [- BAE -] 0  0  0  0  0  0
+#   AND 0101  [- DST -][- SRC -][% ALU  operand %]
 #   LDR 0110  [- DST -][- BAE -][- OFFS (6-bit) -]
 #   STR 0111  [- SRC -][- BAE -][- OFFS (6-bit) -]
 #   RTI 1000  (Not implemented)
-#   NOT 1001  [- DST -][- SRC -][% ALU	operand %]
-#   LDI 1010  [- DST -][-   PC OFFSET (9-bit)	-]
-#   STI 1011  [- SRC -][-   PC OFFSET (9-bit)	-]
-#   JMP 1100   0  0  0 [- BAE -] 0  0  0  0  0	0
+#   NOT 1001  [- DST -][- SRC -][% ALU  operand %]
+#   LDI 1010  [- DST -][-   PC OFFSET (9-bit)   -]
+#   STI 1011  [- SRC -][-   PC OFFSET (9-bit)   -]
+#   JMP 1100   0  0  0 [- BAE -] 0  0  0  0  0  0
 #   RES 1101  (Unused)
-#   LEA 1110  [- DST -][-   PC OFFSET (9-bit)	-]
-#  TRAP 1111   0  0  0	0 [-	TRAP  VECTOR	-]
+#   LEA 1110  [- DST -][-   PC OFFSET (9-bit)   -]
+#  TRAP 1111   0  0  0  0 [-    TRAP  VECTOR    -]
 #
-# ALU operand			 1 [- IMMED (5) -]
-#				 0  0  0 [- SR2 -]
-# JSR operand: 1 [-	  OFFSET (11-bit)	-]
-# JSSR:        0  0  0 [- BAE -] 0  0  0  0  0	0
+# ALU operand                    1 [- IMMED (5) -]
+#                                0  0  0 [- SR2 -]
+# JSR operand: 1 [-       OFFSET (11-bit)       -]
+# JSSR:        0  0  0 [- BAE -] 0  0  0  0  0  0
 #
 sub exec
 {
@@ -286,7 +286,7 @@ sub exec
 	# I'll do this in a bit.
 	if ($opcode & OP_TRAP) {
 		my $vec = $IR & 0xFF;
-		$self->debug("	TRAP %02X\n", $vec);
+		$self->debug("  TRAP %02X\n", $vec);
 		return $self->trap($vec);
 	}
 
@@ -338,7 +338,7 @@ sub exec
 	#
 	#   SRC   in ADD AND NOT
 	#   BASE  in LDR STR
-	#	     JMP JSSR
+	#            JMP JSSR
 	#
 	# They should be derivable from both $IR and $offset.
 	# We'll do it in the more straightforward way...
@@ -358,7 +358,7 @@ sub exec
 	if ($opcode & $OFFMASK) {
 		if ($opcode & OP_BR) {
 			_modulo(\$off, 9);
-			$self->debug("	BR   %s%s%s off=%03X[%04X]\n",
+			$self->debug("  BR   %s%s%s off=%03X[%04X]\n",
 				$lhs & CC_N ? "n" : " ",
 				$lhs & CC_Z ? "z" : " ",
 				$lhs & CC_P ? "p" : " ",
@@ -368,13 +368,13 @@ sub exec
 		}
 		if ($opcode & OP_LEA) {
 			_modulo(\$off, 9);
-			$self->debug("	LEA  R%d off=%03X => %04X\n",
+			$self->debug("  LEA  R%d off=%03X => %04X\n",
 				$lhs, $off & 0x1FF, $PC + $off);
 			$self->R($lhs, $PC + $off);
 			return;
 		}
 		# Effective address...
-		#    PC + OFF9	     for LD, ST
+		#    PC + OFF9       for LD, ST
 		#    M[PC + OFF9]    for LDI, STI
 		#    R[BASE] + OFF6  for LDR, STR
 		my $addr;
@@ -446,7 +446,7 @@ sub exec
 
 		if ($opcode & OP_AND) {
 			my $res = $opl & $opr;
-			$self->debug("	AND  R%d = (%04X & %04X) => %04X\n",
+			$self->debug("  AND  R%d = (%04X & %04X) => %04X\n",
 				$lhs, $opl % 0x10000,
 				$opr % 0x10000, $res % 0x10000);
 			$self->R($lhs, $res);
@@ -455,7 +455,7 @@ sub exec
 		}
 		if ($opcode & OP_ADD) {
 			my $res = ($opl + $opr) % 0x10000;
-			$self->debug("	ADD  R%d = (%04X + %04X) => %04X\n",
+			$self->debug("  ADD  R%d = (%04X + %04X) => %04X\n",
 				$lhs, $opl % 0x10000,
 				$opr % 0x10000, $res % 0x10000);
 			$self->R($lhs, $res);
@@ -463,7 +463,7 @@ sub exec
 			return;
 		}
 		if ($opcode & OP_NOT) {
-			$self->debug("	NOT R%d = ~ (%04X) => %04X\n",
+			$self->debug("  NOT R%d = ~ (%04X) => %04X\n",
 				$lhs, $opl % 0x10000,
 				$res % 0x10000);
 			my $res = ~$opl & 0x10000;
@@ -476,7 +476,7 @@ sub exec
 	}
 }
 
-# trap (0x25)		 => executes TRAP
+# trap (0x25)            => executes TRAP
 # trap (0x25, &SUB, ...) => defines TRAP
 sub trap
 {
@@ -518,7 +518,7 @@ sub load
 {
 	my $self = shift;
 	my ($file, $fh) = @_;
-	my $w;	   # word (as binary string)
+	my $w;     # word (as binary string)
 	my $n = 0; # position
 	my $s = _read2(\$n, $fh, \$w, $file);
 	croak "$file: $!" unless defined $s;
@@ -605,8 +605,8 @@ my @OPCODE = qw(
 );
 
 my @SYSCAL = qw(
-	SR_GETC SR_OUT	 SR_PUTS
-	SR_IN	SR_PUTSP SR_HALT
+	SR_GETC SR_OUT   SR_PUTS
+	SR_IN   SR_PUTSP SR_HALT
 );
 
 my @NZPBIT = qw(
