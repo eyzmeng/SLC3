@@ -9,9 +9,9 @@ use Carp;
 use constant {
 	# Opcode (bit masks)
 	OP_BR   => 0x0001, OP_ADD  => 0x0002, OP_LD   => 0x0004, OP_ST   => 0x0008,
-        OP_JSR  => 0x0010, OP_AND  => 0x0020, OP_LDR  => 0x0040, OP_STR  => 0x0080,
-        OP_RTI  => 0x0100, OP_NOT  => 0x0200, OP_LDI  => 0x0400, OP_STI  => 0x0800,
-        OP_JMP  => 0x1000, OP_RES  => 0x2000, OP_LEA  => 0x4000, OP_TRAP => 0x8000,
+	OP_JSR  => 0x0010, OP_AND  => 0x0020, OP_LDR  => 0x0040, OP_STR  => 0x0080,
+	OP_RTI  => 0x0100, OP_NOT  => 0x0200, OP_LDI  => 0x0400, OP_STI  => 0x0800,
+	OP_JMP  => 0x1000, OP_RES  => 0x2000, OP_LEA  => 0x4000, OP_TRAP => 0x8000,
 
 	# Service routines
 	SR_GETC  => 0x0020, SR_OUT   => 0x0021, SR_PUTS  => 0x0022,
